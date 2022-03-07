@@ -1,4 +1,5 @@
 from . import Expense
+import matplotlib.pyplot as plt
 
 # Class and constructor
 class BudgetList:  
@@ -23,6 +24,21 @@ class BudgetList:
     def __len__(self):
         return self.expenses.__len__() + self.overages.__len__()
 
+# Create the __iter__() method
+    def __iter__(self):
+        self.iter_e = iter(self.expenses)
+        self.iter_o = iter(self.overages)
+        return self
+
+# Create next()
+    def __next__(self):
+        try:
+            return self.iter_e.__next__()
+        except StopIteration as stop:
+            return self.iter_o.__next__()
+            
+
+
 # Define the main function
 def main():
     myBudgetList = BudgetList(1200)
@@ -37,7 +53,21 @@ def main():
 
 # Print the Length of myBudgetList
     print('The count of all expenses: '+ str(len(myBudgetList)))
+    for entry in myBudgetList:
+        print(entry)
+
+    fig, ax = plt.subplots()
+    labels = ['Expenses', 'Overages', 'Budget']
+    values = [myBudgetList.sum_expenses, myBudgetList.sum_overages, myBudgetList.budget]
+    ax.bar(labels, values, color=['green', 'red', 'blue'])
+
+    ax.set_title('Your total expenses vs. total budget')
+    plt.show()
 
 # Tell Python to run the main function
-    if __name__ == "__main__":
-        return main()
+if __name__ == "__main__":
+    main()
+
+
+
+            
